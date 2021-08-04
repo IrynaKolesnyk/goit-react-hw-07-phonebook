@@ -3,25 +3,14 @@ import { connect } from "react-redux";
 import ContactForm from "./components/ContactForm/ContactForm";
 import ContactList from "./components/ContactList/ContactList";
 import Filter from "./components/Filter/Filter";
-import action from "./redux/phoneBook/phoneBookActions";
+import { fetchContacts } from "./redux/phoneBook/contacts-operations";
+import { getContacts, getLoading } from "./redux/phoneBook/contacts-selectors";
 
 class App extends Component {
   state = {};
-
-  // componentDidMount() {
-  //   const contactsStorage = localStorage.getItem('contacts');
-  //   if (contactsStorage) {
-  //     this.props.storageContact(JSON.parse(contactsStorage));
-  //   }
-  // }
-
-  // componentDidUpdate(prevProps) {
-  //   const { contacts } = this.props;
-  //   if (prevProps.contacts !== contacts) {
-  //     localStorage.setItem('contacts', JSON.stringify(contacts));
-  //   }
-  // }
-
+  componentDidMount() {
+    this.props.fetchContacts();
+  }
   render() {
     return (
       <div className="App">
@@ -30,19 +19,19 @@ class App extends Component {
         <h2>Contacts</h2>
         <Filter />
         <ContactList />
+        {this.props.isLoadingContacts && <h2>Loading...</h2>}
       </div>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
-  contacts: state.contacts.items,
+  contacts: getContacts(state),
+  isLoadingContacts: getLoading(state),
 });
 
-// const mapDispatchToProps = {
-//   storageContact: action.storageContact,
-// };
+const mapDispatchToProps = {
+  fetchContacts: fetchContacts,
+};
 
-export default connect(mapStateToProps)(App);
-
-// , mapDispatchToProps
+export default connect(mapStateToProps, mapDispatchToProps)(App);

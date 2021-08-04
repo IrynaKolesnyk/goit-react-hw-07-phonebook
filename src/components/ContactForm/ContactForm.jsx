@@ -1,35 +1,36 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { v4 as uuidv4 } from 'uuid';
-import ContactFormStyled from './ContactFormStyled';
-import contactsActions from '../../redux/phoneBook/phoneBookActions';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { v4 as uuidv4 } from "uuid";
+import ContactFormStyled from "./ContactFormStyled";
+import { getContacts } from "../../redux/phoneBook/contacts-selectors";
+import { addContact } from "../../redux/phoneBook/contacts-operations";
 
 class ContactForm extends Component {
   state = {
-    name: '',
-    number: '',
+    name: "",
+    number: "",
   };
 
   nameId = uuidv4();
   phoneId = uuidv4();
 
-  handelInputChange = event => {
+  handelInputChange = (event) => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
   };
 
-  handelFormSubmit = event => {
+  handelFormSubmit = (event) => {
     event.preventDefault();
     const { name, number } = this.state;
     const { contacts } = this.props;
     const existContact = contacts.find(
-      contact => contact.name.toLowerCase() === name.toLowerCase(),
+      (contact) => contact.name.toLowerCase() === name.toLowerCase()
     );
     if (existContact) {
       return alert(`Contact "${name}" already exists`);
     }
     this.props.onSubmit(name, number);
-    this.setState({ name: '', number: '' });
+    this.setState({ name: "", number: "" });
   };
 
   render() {
@@ -75,13 +76,12 @@ class ContactForm extends Component {
   }
 }
 
-const mapstateToProps = state => ({
-  contacts: state.contacts.items,
+const mapstateToProps = (state) => ({
+  contacts: getContacts(state),
 });
 
-const mapDispatchToProps = dispatch => ({
-  onSubmit: (name, number) =>
-    dispatch(contactsActions.addContact(name, number)),
+const mapDispatchToProps = (dispatch) => ({
+  onSubmit: (name, number) => dispatch(addContact(name, number)),
 });
 
 export default connect(mapstateToProps, mapDispatchToProps)(ContactForm);

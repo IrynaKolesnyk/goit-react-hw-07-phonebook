@@ -1,7 +1,8 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import FilterStyled from './FilterStyled';
-import contactsActions from '../../redux/phoneBook/phoneBookActions';
+import React from "react";
+import { connect } from "react-redux";
+import FilterStyled from "./FilterStyled";
+import contactsActions from "../../redux/phoneBook/phoneBookActions";
+import { getFilter } from "../../redux/phoneBook/contacts-selectors";
 
 const Filter = ({ filter, onChange }) => {
   return (
@@ -26,12 +27,13 @@ const Filter = ({ filter, onChange }) => {
   );
 };
 
-const mapstateToProps = state => ({
-  value: state.contacts.filter,
+const mapstateToProps = (state) => ({
+  value: getFilter(state),
 });
 
-const mapDispatchToProps = dispatch => ({
-  onChange: event => dispatch(contactsActions.changeFilter(event.target.value)),
+const mapDispatchToProps = (dispatch) => ({
+  onChange: (event) =>
+    dispatch(contactsActions.changeFilter(event.target.value)),
 });
 
 export default connect(mapstateToProps, mapDispatchToProps)(Filter);

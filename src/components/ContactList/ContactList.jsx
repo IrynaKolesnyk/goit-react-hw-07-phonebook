@@ -1,12 +1,16 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import ContactListStyled from './ContactListStyled';
-import contactsActions from '../../redux/phoneBook/phoneBookActions';
+import React from "react";
+import { connect } from "react-redux";
+import ContactListStyled from "./ContactListStyled";
+import { getVisibleContacts } from "../../redux/phoneBook/contacts-selectors";
+import {
+  deleteContact,
+  getContacts,
+} from "../../redux/phoneBook/contacts-operations";
 
 const ContactList = ({ contacts, onDeleteContact }) => {
   return (
     <ContactListStyled>
-      {contacts.map(contact => {
+      {contacts.map((contact) => {
         const { id, name, number } = contact;
 
         return (
@@ -27,21 +31,14 @@ const ContactList = ({ contacts, onDeleteContact }) => {
   );
 };
 
-const getVisibleContacts = (allContacts, filter) => {
-  const normalizedFilter = filter.toLowerCase();
-  return allContacts.filter(contact =>
-    contact.name.toLowerCase().includes(normalizedFilter),
-  );
-};
-
-const mapstateToProps = state => {
+const mapstateToProps = (state) => {
   return {
-    contacts: getVisibleContacts(state.contacts.items, state.contacts.filter),
+    contacts: getVisibleContacts(state),
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  onDeleteContact: id => dispatch(contactsActions.deleteContact(id)),
+const mapDispatchToProps = (dispatch) => ({
+  onDeleteContact: (id) => dispatch(deleteContact(id)),
 });
 
 export default connect(mapstateToProps, mapDispatchToProps)(ContactList);
