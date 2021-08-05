@@ -1,9 +1,6 @@
-import { combineReducers } from "redux";
 import phoneBookReducer from "./phoneBookReducer";
 
-const rootReducer = combineReducers({
-  contacts: phoneBookReducer,
-});
+const rootReducer = phoneBookReducer;
 
 export default rootReducer;
 
