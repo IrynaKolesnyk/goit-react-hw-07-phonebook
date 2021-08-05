@@ -4,7 +4,11 @@ import ContactForm from "./components/ContactForm/ContactForm";
 import ContactList from "./components/ContactList/ContactList";
 import Filter from "./components/Filter/Filter";
 import { fetchContacts } from "./redux/phoneBook/contacts-operations";
-import { getContacts, getLoading } from "./redux/phoneBook/contacts-selectors";
+import {
+  getContacts,
+  getLoading,
+  getError,
+} from "./redux/phoneBook/contacts-selectors";
 
 class App extends Component {
   state = {};
@@ -20,6 +24,7 @@ class App extends Component {
         <Filter />
         <ContactList />
         {this.props.isLoadingContacts && <h2>Loading...</h2>}
+        {this.props.isError && <h2>Error, try again</h2>}
       </div>
     );
   }
@@ -28,6 +33,7 @@ class App extends Component {
 const mapStateToProps = (state) => ({
   contacts: getContacts(state),
   isLoadingContacts: getLoading(state),
+  isError: getError(state),
 });
 
 const mapDispatchToProps = {
